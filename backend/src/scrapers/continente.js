@@ -2,6 +2,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
+const matcher = require('../utils/matcher');
 
 const DB_PATH = path.join(__dirname, '..', 'db', 'prices.db');
 
@@ -271,22 +272,42 @@ function saveProductToDb(db, product) {
           productId = row.id;
           saveStoreProductAndPrice(productId);
         } else {
-          // Brand name or generic matching
-          let category = 'Outros';
-          if (product.category.includes('Leite')) category = 'Laticínios';
-          else if (product.category.includes('Arroz') || product.category.includes('Massa') || product.category.includes('Azeite')) category = 'Mercearia';
-          else if (product.category.includes('Café')) category = 'Bebidas/Café';
-          else if (product.category.includes('Pão') || product.category.includes('Padaria')) category = 'Padaria';
+          // EAN not found, let's do a fuzzy name match on the existing catalog
+          db.all('SELECT * FROM products', [], (err, dbProducts) => {
+            if (err) return reject(err);
 
-          // Insert new canonical product
-          db.run(
-            'INSERT INTO products (name, brand, category, barcode_ean) VALUES (?, ?, ?, ?)',
-            [product.name, product.brand, category, product.ean],
-            function(err) {
-              if (err) return reject(err);
-              saveStoreProductAndPrice(this.lastID);
+            const matchResult = matcher.findBestMatch(product.name, product.brand, dbProducts);
+
+            if (matchResult && matchResult.score >= 0.45) {
+              const matchedId = matchResult.product.id;
+              // Update the mock EAN in products to the real scraped EAN
+              db.run(
+                'UPDATE products SET barcode_ean = ? WHERE id = ?',
+                [product.ean, matchedId],
+                (err) => {
+                  if (err) return reject(err);
+                  saveStoreProductAndPrice(matchedId);
+                }
+              );
+            } else {
+              // Brand name or generic matching
+              let category = 'Outros';
+              if (product.category.includes('Leite')) category = 'Laticínios';
+              else if (product.category.includes('Arroz') || product.category.includes('Massa') || product.category.includes('Azeite')) category = 'Mercearia';
+              else if (product.category.includes('Café')) category = 'Bebidas/Café';
+              else if (product.category.includes('Pão') || product.category.includes('Padaria')) category = 'Padaria';
+
+              // Insert new canonical product
+              db.run(
+                'INSERT INTO products (name, brand, category, barcode_ean) VALUES (?, ?, ?, ?)',
+                [product.name, product.brand, category, product.ean],
+                function(err) {
+                  if (err) return reject(err);
+                  saveStoreProductAndPrice(this.lastID);
+                }
+              );
             }
-          );
+          });
         }
       });
     });

@@ -10,6 +10,7 @@ function normalize(str) {
     .normalize('NFD') // decompose combined graphemes (remove accents)
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]/g, ' ') // replace non-alphanumeric with spaces
+    .replace(/\bsalgad[ao]s?\b/g, 'sal') // normalize salgada/salgado to sal
     .replace(/\s+/g, ' ') // collapse multiple spaces
     .trim();
 }
