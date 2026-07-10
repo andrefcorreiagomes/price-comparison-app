@@ -6,9 +6,17 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
 
   // Helper to get product package quantity details
   const getProductQuantity = (prices) => {
-    const storeDetails = prices.Continente || prices['Pingo Doce'];
+    const c = prices.Continente;
+    const pd = prices['Pingo Doce'];
+    if (c && pd) {
+      if (c.packageSize === pd.packageSize && c.packageUnit === pd.packageUnit) {
+        return `${c.packageSize}${c.packageUnit}`;
+      }
+      return `C: ${c.packageSize}${c.packageUnit} • PD: ${pd.packageSize}${pd.packageUnit}`;
+    }
+    const storeDetails = c || pd;
     if (!storeDetails) return '';
-    return `${storeDetails.packageSize} ${storeDetails.packageUnit}`;
+    return `${storeDetails.packageSize}${storeDetails.packageUnit}`;
   };
 
   // Calculate totals locally for instantaneous updates

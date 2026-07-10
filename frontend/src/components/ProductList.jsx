@@ -12,12 +12,6 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
     );
   }
 
-  // Helper to get product package quantity details
-  const getProductQuantity = (prices) => {
-    const storeDetails = prices.Continente || prices['Pingo Doce'];
-    if (!storeDetails) return '';
-    return `${storeDetails.packageSize} ${storeDetails.packageUnit}`;
-  };
 
   // Helper to get first available product image URL
   const getProductImage = (prices) => {
@@ -82,19 +76,8 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
             <div className="product-info">
               <span className="product-category">{product.category}</span>
               <h2 className="product-name">{product.name}</h2>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.25rem' }}>
+              <div style={{ marginTop: '0.25rem' }}>
                 <span className="product-brand">Brand: {product.brand}</span>
-                <span className="product-size-badge" style={{ 
-                  fontSize: '0.75rem', 
-                  fontWeight: '600', 
-                  color: 'var(--text-secondary)', 
-                  background: 'rgba(255, 255, 255, 0.05)', 
-                  padding: '2px 8px', 
-                  borderRadius: '4px',
-                  border: '1px solid var(--border-color)'
-                }}>
-                  {getProductQuantity(product.prices)}
-                </span>
               </div>
             </div>
 
@@ -102,7 +85,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
             <div className="price-comparison-row">
               {/* Continente */}
               <div className="store-price-box continente">
-                <span className="store-name-tag">Continente</span>
+                <span className="store-name-tag">Continente ({product.prices.Continente.packageSize}{product.prices.Continente.packageUnit})</span>
                 {product.prices.Continente ? (
                   <>
                     <span className="store-price">
@@ -126,7 +109,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
 
               {/* Pingo Doce */}
               <div className="store-price-box pingodoce">
-                <span className="store-name-tag">Pingo Doce</span>
+                <span className="store-name-tag">Pingo Doce ({product.prices['Pingo Doce'].packageSize}{product.prices['Pingo Doce'].packageUnit})</span>
                 {product.prices['Pingo Doce'] ? (
                   <>
                     <span className="store-price">
