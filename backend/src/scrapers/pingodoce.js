@@ -51,8 +51,8 @@ function parseQuantity(qtyStr) {
   
   const str = qtyStr.toLowerCase().replace('emb.', '').replace(/\s+/g, ' ').trim();
   
-  // Match patterns like "1 kg", "250 g", "750 ml", "1 lt", "1.5 l", "6x1 l", "4 x 120 g", "0.25 kg"
-  const match = str.match(/([\d.,x\s]+)\s*(lt|l|kg|g|ml)/i);
+  // Match patterns like "1 kg", "250 g", "750 ml", "75 cl", "1 lt", "1.5 l", "6x1 l", "4 x 120 g", "0.25 kg"
+  const match = str.match(/([\d.,x\s]+)\s*(lt|l|kg|g|ml|cl)/i);
   if (match) {
     let sizeStr = match[1].replace(/\s+/g, '').replace(',', '.');
     let size = 1.0;
@@ -76,6 +76,9 @@ function parseQuantity(qtyStr) {
       unit = 'KG';
     } else if (unit === 'ML') {
       size = size / 1000.0;
+      unit = 'L';
+    } else if (unit === 'CL') {
+      size = size / 100.0;
       unit = 'L';
     }
     return { size, unit };
@@ -197,13 +200,13 @@ function saveProductToDb(db, product) {
       db.all('SELECT * FROM products', [], (err, dbProducts) => {
         if (err) return reject(err);
 
+        const parsedQty = parseQuantity(product.quantityStr);
         // Try to match the scraped product with a canonical one
-        const matchResult = matcher.findBestMatch(product.name, product.brand, dbProducts);
+        const matchResult = matcher.findBestMatch(product.name, product.brand, dbProducts, parsedQty.size);
         
         let productId;
         
         const saveStoreProductAndPrice = (prodId) => {
-          const parsedQty = parseQuantity(product.quantityStr);
           
           // 2. Insert or update store product mapping
           db.get(

@@ -47,16 +47,39 @@ function getWordMatchScore(str1, str2) {
   return intersectionCount / unionSize;
 }
 
+function extractSizeFromName(name) {
+  if (!name) return null;
+  // Match patterns like "750ml", "250g", "1L", "500g", "4x120g"
+  const match = name.toLowerCase().match(/([\d.,x]+)\s*(ml|g|kg|l|cl)/i);
+  if (match) {
+    let sizeStr = match[1].replace(/\s+/g, '').replace(',', '.');
+    let size = 1.0;
+    if (sizeStr.includes('x')) {
+      const parts = sizeStr.split('x');
+      size = parseFloat(parts[0]) * parseFloat(parts[1]);
+    } else {
+      size = parseFloat(sizeStr);
+    }
+    let unit = match[2].toUpperCase();
+    if (unit === 'G') return size / 1000.0;
+    if (unit === 'ML') return size / 1000.0;
+    if (unit === 'CL') return size / 100.0;
+    return size;
+  }
+  return null;
+}
+
 /**
  * Finds the best matching canonical product in the database.
  * 
  * @param {string} scrapedName - Scraped product name (e.g. "Arroz Agulha")
  * @param {string} scrapedBrand - Scraped product brand (e.g. "Cigala")
  * @param {Array} dbProducts - Canonical products from DB (each has id, name, brand, category)
- * @param {number} threshold - Minimum score to consider a match (default: 0.4)
+ * @param {number|null} scrapedSize - Scraped quantity size normalized to KG/L
+ * @param {number} threshold - Minimum score to consider a match (default: 0.45)
  * @returns {Object|null} The best matching product from dbProducts, or null if no match is found
  */
-function findBestMatch(scrapedName, scrapedBrand, dbProducts, threshold = 0.45) {
+function findBestMatch(scrapedName, scrapedBrand, dbProducts, scrapedSize = null, threshold = 0.45) {
   const normScrapedBrand = normalize(scrapedBrand);
   const isScrapedHouseBrand = isHouseBrand(scrapedBrand);
   
@@ -81,6 +104,18 @@ function findBestMatch(scrapedName, scrapedBrand, dbProducts, threshold = 0.45) 
     }
 
     if (!brandMatches) continue;
+
+    // Size validation:
+    // Prevent matching different package sizes if canonical name specifies a size
+    if (scrapedSize !== null) {
+      const canonicalSize = extractSizeFromName(prod.name);
+      if (canonicalSize !== null) {
+        // If sizes are different (allow minor floating point variance of 0.05)
+        if (Math.abs(canonicalSize - scrapedSize) > 0.05) {
+          continue;
+        }
+      }
+    }
 
     // Combine canonical name and brand for matching context
     const fullDbText = `${prod.name} ${isDbHouseBrand ? '' : prod.brand}`;
