@@ -30,21 +30,23 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
     return null;
   };
 
-  // Helper to compare prices and calculate savings details
+  // Helper to compare prices and calculate savings details based on unit price
   const getCheapestInfo = (prices) => {
-    const cVal = prices.Continente ? prices.Continente.price : null;
-    const pdVal = prices['Pingo Doce'] ? prices['Pingo Doce'].price : null;
+    const cVal = prices.Continente ? prices.Continente.pricePerUnit : null;
+    const pdVal = prices['Pingo Doce'] ? prices['Pingo Doce'].pricePerUnit : null;
 
     if (cVal === null || pdVal === null) return null;
 
+    const unit = prices.Continente.packageUnit || prices['Pingo Doce'].packageUnit || 'unit';
+
     if (cVal < pdVal) {
       const diff = pdVal - cVal;
-      return { store: 'Continente', savings: diff };
+      return { store: 'Continente', savings: diff, unit };
     } else if (pdVal < cVal) {
       const diff = cVal - pdVal;
-      return { store: 'Pingo Doce', savings: diff };
+      return { store: 'Pingo Doce', savings: diff, unit };
     }
-    return { store: 'Tie', savings: 0 };
+    return { store: 'Tie', savings: 0, unit };
   };
 
   return (
@@ -156,7 +158,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
                   </div>
                 ) : (
                   <div className="cheapest-badge">
-                    Cheaper at {cheapestInfo.store} (save €{cheapestInfo.savings.toFixed(2)})
+                    Cheaper at {cheapestInfo.store} (save €{cheapestInfo.savings.toFixed(2)}/{cheapestInfo.unit})
                   </div>
                 )}
               </div>
