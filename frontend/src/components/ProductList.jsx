@@ -85,7 +85,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
             <div className="price-comparison-row">
               {/* Continente */}
               <div className="store-price-box continente">
-                <span className="store-name-tag">Continente ({product.prices.Continente.packageSize}{product.prices.Continente.packageUnit})</span>
+                <span className="store-name-tag">Continente {product.prices.Continente ? `(${product.prices.Continente.packageSize}${product.prices.Continente.packageUnit})` : ''}</span>
                 {product.prices.Continente ? (
                   <>
                     <span className="store-price">
@@ -109,7 +109,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
 
               {/* Pingo Doce */}
               <div className="store-price-box pingodoce">
-                <span className="store-name-tag">Pingo Doce ({product.prices['Pingo Doce'].packageSize}{product.prices['Pingo Doce'].packageUnit})</span>
+                <span className="store-name-tag">Pingo Doce {product.prices['Pingo Doce'] ? `(${product.prices['Pingo Doce'].packageSize}${product.prices['Pingo Doce'].packageUnit})` : ''}</span>
                 {product.prices['Pingo Doce'] ? (
                   <>
                     <span className="store-price">
