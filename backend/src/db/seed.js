@@ -118,12 +118,12 @@ const storeProducts = [
   { id: 4, product_id: 2, store: 'Pingo Doce', store_product_id: 'pd-2022', store_url: 'https://www.pingodoce.pt/produto/leite-uht-meio-gordo-pingo-doce-pd-2022.html', package_size: 1.0, package_unit: 'L' },
 
   // Primor Butter
-  { id: 5, product_id: 3, store: 'Continente', store_product_id: '109988', store_url: 'https://www.continente.pt/produto/manteiga-com-sal-primor-109988.html', package_size: 250, package_unit: 'g' },
-  { id: 6, product_id: 3, store: 'Pingo Doce', store_product_id: 'pd-3033', store_url: 'https://www.pingodoce.pt/produto/manteiga-com-sal-primor-pd-3033.html', package_size: 250, package_unit: 'g' },
+  { id: 5, product_id: 3, store: 'Continente', store_product_id: '109988', store_url: 'https://www.continente.pt/produto/manteiga-com-sal-primor-109988.html', package_size: 0.25, package_unit: 'kg' },
+  { id: 6, product_id: 3, store: 'Pingo Doce', store_product_id: 'pd-3033', store_url: 'https://www.pingodoce.pt/produto/manteiga-com-sal-primor-pd-3033.html', package_size: 0.25, package_unit: 'kg' },
 
   // Greek Yogurt
-  { id: 7, product_id: 4, store: 'Continente', store_product_id: '809010', store_url: 'https://www.continente.pt/produto/iogurte-grego-natural-danone-809010.html', package_size: 480, package_unit: 'g' },
-  { id: 8, product_id: 4, store: 'Pingo Doce', store_product_id: 'pd-4044', store_url: 'https://www.pingodoce.pt/produto/iogurte-grego-natural-danone-pd-4044.html', package_size: 480, package_unit: 'g' },
+  { id: 7, product_id: 4, store: 'Continente', store_product_id: '809010', store_url: 'https://www.continente.pt/produto/iogurte-grego-natural-danone-809010.html', package_size: 0.48, package_unit: 'kg' },
+  { id: 8, product_id: 4, store: 'Pingo Doce', store_product_id: 'pd-4044', store_url: 'https://www.pingodoce.pt/produto/iogurte-grego-natural-danone-pd-4044.html', package_size: 0.48, package_unit: 'kg' },
 
   // Cigala Rice
   { id: 9, product_id: 5, store: 'Continente', store_product_id: '506070', store_url: 'https://www.continente.pt/produto/arroz-carolino-cigala-506070.html', package_size: 1.0, package_unit: 'kg' },
@@ -134,36 +134,36 @@ const storeProducts = [
   { id: 12, product_id: 6, store: 'Pingo Doce', store_product_id: 'pd-5066', store_url: 'https://www.pingodoce.pt/produto/arroz-carolino-pingo-doce-pd-5066.html', package_size: 1.0, package_unit: 'kg' },
 
   // Milaneza Spaghetti
-  { id: 13, product_id: 7, store: 'Continente', store_product_id: '702030', store_url: 'https://www.continente.pt/produto/massa-esparguete-milaneza-702030.html', package_size: 500, package_unit: 'g' },
-  { id: 14, product_id: 7, store: 'Pingo Doce', store_product_id: 'pd-7077', store_url: 'https://www.pingodoce.pt/produto/massa-esparguete-milaneza-pd-7077.html', package_size: 500, package_unit: 'g' },
+  { id: 13, product_id: 7, store: 'Continente', store_product_id: '702030', store_url: 'https://www.continente.pt/produto/massa-esparguete-milaneza-702030.html', package_size: 0.5, package_unit: 'kg' },
+  { id: 14, product_id: 7, store: 'Pingo Doce', store_product_id: 'pd-7077', store_url: 'https://www.pingodoce.pt/produto/massa-esparguete-milaneza-pd-7077.html', package_size: 0.5, package_unit: 'kg' },
 
   // Own Brand Spaghetti
-  { id: 15, product_id: 8, store: 'Continente', store_product_id: '702040', store_url: 'https://www.continente.pt/produto/massa-esparguete-continente-702040.html', package_size: 500, package_unit: 'g' },
-  { id: 16, product_id: 8, store: 'Pingo Doce', store_product_id: 'pd-7088', store_url: 'https://www.pingodoce.pt/produto/massa-esparguete-pingo-doce-pd-7088.html', package_size: 500, package_unit: 'g' },
+  { id: 15, product_id: 8, store: 'Continente', store_product_id: '702040', store_url: 'https://www.continente.pt/produto/massa-esparguete-continente-702040.html', package_size: 0.5, package_unit: 'kg' },
+  { id: 16, product_id: 8, store: 'Pingo Doce', store_product_id: 'pd-7088', store_url: 'https://www.pingodoce.pt/produto/massa-esparguete-pingo-doce-pd-7088.html', package_size: 0.5, package_unit: 'kg' },
 
   // Oliveira da Serra Olive Oil
-  { id: 17, product_id: 9, store: 'Continente', store_product_id: '901020', store_url: 'https://www.continente.pt/produto/azeite-virgem-extra-oliveira-da-serra-901020.html', package_size: 750, package_unit: 'ml' },
-  { id: 18, product_id: 9, store: 'Pingo Doce', store_product_id: 'pd-9099', store_url: 'https://www.pingodoce.pt/produto/azeite-virgem-extra-oliveira-da-serra-pd-9099.html', package_size: 750, package_unit: 'ml' },
+  { id: 17, product_id: 9, store: 'Continente', store_product_id: '901020', store_url: 'https://www.continente.pt/produto/azeite-virgem-extra-oliveira-da-serra-901020.html', package_size: 0.75, package_unit: 'L' },
+  { id: 18, product_id: 9, store: 'Pingo Doce', store_product_id: 'pd-9099', store_url: 'https://www.pingodoce.pt/produto/azeite-virgem-extra-oliveira-da-serra-pd-9099.html', package_size: 0.75, package_unit: 'L' },
 
   // Own Brand Olive Oil
-  { id: 19, product_id: 10, store: 'Continente', store_product_id: '901030', store_url: 'https://www.continente.pt/produto/azeite-virgem-extra-continente-901030.html', package_size: 750, package_unit: 'ml' },
-  { id: 20, product_id: 10, store: 'Pingo Doce', store_product_id: 'pd-9088', store_url: 'https://www.pingodoce.pt/produto/azeite-virgem-extra-pingo-doce-pd-9088.html', package_size: 750, package_unit: 'ml' },
+  { id: 19, product_id: 10, store: 'Continente', store_product_id: '901030', store_url: 'https://www.continente.pt/produto/azeite-virgem-extra-continente-901030.html', package_size: 0.75, package_unit: 'L' },
+  { id: 20, product_id: 10, store: 'Pingo Doce', store_product_id: 'pd-9088', store_url: 'https://www.pingodoce.pt/produto/azeite-virgem-extra-pingo-doce-pd-9088.html', package_size: 0.75, package_unit: 'L' },
 
   // Nescafé Instant Coffee
-  { id: 21, product_id: 11, store: 'Continente', store_product_id: '302010', store_url: 'https://www.continente.pt/produto/cafe-soluvel-nescafe-classico-302010.html', package_size: 200, package_unit: 'g' },
-  { id: 22, product_id: 11, store: 'Pingo Doce', store_product_id: 'pd-3011', store_url: 'https://www.pingodoce.pt/produto/cafe-soluvel-nescafe-classico-pd-3011.html', package_size: 200, package_unit: 'g' },
+  { id: 21, product_id: 11, store: 'Continente', store_product_id: '302010', store_url: 'https://www.continente.pt/produto/cafe-soluvel-nescafe-classico-302010.html', package_size: 0.2, package_unit: 'kg' },
+  { id: 22, product_id: 11, store: 'Pingo Doce', store_product_id: 'pd-3011', store_url: 'https://www.pingodoce.pt/produto/cafe-soluvel-nescafe-classico-pd-3011.html', package_size: 0.2, package_unit: 'kg' },
 
   // Own Brand Coffee
-  { id: 23, product_id: 12, store: 'Continente', store_product_id: '302020', store_url: 'https://www.continente.pt/produto/cafe-soluvel-continente-302020.html', package_size: 200, package_unit: 'g' },
-  { id: 24, product_id: 12, store: 'Pingo Doce', store_product_id: 'pd-3022', store_url: 'https://www.pingodoce.pt/produto/cafe-soluvel-pingo-doce-pd-3022.html', package_size: 200, package_unit: 'g' },
+  { id: 23, product_id: 12, store: 'Continente', store_product_id: '302020', store_url: 'https://www.continente.pt/produto/cafe-soluvel-continente-302020.html', package_size: 0.2, package_unit: 'kg' },
+  { id: 24, product_id: 12, store: 'Pingo Doce', store_product_id: 'pd-3022', store_url: 'https://www.pingodoce.pt/produto/cafe-soluvel-pingo-doce-pd-3022.html', package_size: 0.2, package_unit: 'kg' },
 
   // Bimbo Bread
-  { id: 25, product_id: 13, store: 'Continente', store_product_id: '601020', store_url: 'https://www.continente.pt/produto/pao-de-forma-integral-bimbo-601020.html', package_size: 650, package_unit: 'g' },
-  { id: 26, product_id: 13, store: 'Pingo Doce', store_product_id: 'pd-6066', store_url: 'https://www.pingodoce.pt/produto/pao-de-forma-integral-bimbo-pd-6066.html', package_size: 650, package_unit: 'g' },
+  { id: 25, product_id: 13, store: 'Continente', store_product_id: '601020', store_url: 'https://www.continente.pt/produto/pao-de-forma-integral-bimbo-601020.html', package_size: 0.65, package_unit: 'kg' },
+  { id: 26, product_id: 13, store: 'Pingo Doce', store_product_id: 'pd-6066', store_url: 'https://www.pingodoce.pt/produto/pao-de-forma-integral-bimbo-pd-6066.html', package_size: 0.65, package_unit: 'kg' },
 
   // Own Brand Bread
-  { id: 27, product_id: 14, store: 'Continente', store_product_id: '601030', store_url: 'https://www.continente.pt/produto/pao-de-forma-branco-continente-601030.html', package_size: 800, package_unit: 'g' },
-  { id: 28, product_id: 14, store: 'Pingo Doce', store_product_id: 'pd-6077', store_url: 'https://www.pingodoce.pt/produto/pao-de-forma-branco-pingo-doce-pd-6077.html', package_size: 800, package_unit: 'g' }
+  { id: 27, product_id: 14, store: 'Continente', store_product_id: '601030', store_url: 'https://www.continente.pt/produto/pao-de-forma-branco-continente-601030.html', package_size: 0.8, package_unit: 'kg' },
+  { id: 28, product_id: 14, store: 'Pingo Doce', store_product_id: 'pd-6077', store_url: 'https://www.pingodoce.pt/produto/pao-de-forma-branco-pingo-doce-pd-6077.html', package_size: 0.8, package_unit: 'kg' }
 ];
 
 // Base prices to fluctuate from (Continente price vs Pingo Doce price)

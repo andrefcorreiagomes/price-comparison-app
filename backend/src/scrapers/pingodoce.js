@@ -69,6 +69,15 @@ function parseQuantity(qtyStr) {
     
     let unit = match[2].toUpperCase();
     if (unit === 'LT') unit = 'L';
+    
+    // Normalize to standard base units (KG and L)
+    if (unit === 'G') {
+      size = size / 1000.0;
+      unit = 'KG';
+    } else if (unit === 'ML') {
+      size = size / 1000.0;
+      unit = 'L';
+    }
     return { size, unit };
   }
   return { size: 1.0, unit: 'un' };
@@ -229,11 +238,8 @@ function saveProductToDb(db, product) {
         };
 
         const insertPriceHistory = (storeProdId, parsedQty, prodId) => {
-          // Calculate unit factor
-          let unitFactor = parsedQty.size;
-          if (parsedQty.unit === 'G' || parsedQty.unit === 'ML') {
-            unitFactor = parsedQty.size / 1000.0;
-          }
+          // Calculate unit factor (already normalized to KG/L in parseQuantity)
+          const unitFactor = parsedQty.size;
           const pricePerUnit = Number((product.price / unitFactor).toFixed(2));
           const todayStr = new Date().toISOString().split('T')[0];
 
