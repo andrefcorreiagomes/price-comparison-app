@@ -12,6 +12,13 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
     );
   }
 
+  // Helper to get product package quantity details
+  const getProductQuantity = (prices) => {
+    const storeDetails = prices.Continente || prices['Pingo Doce'];
+    if (!storeDetails) return '';
+    return `${storeDetails.packageSize} ${storeDetails.packageUnit}`;
+  };
+
   // Helper to compare prices and calculate savings details
   const getCheapestInfo = (prices) => {
     const cVal = prices.Continente ? prices.Continente.price : null;
@@ -44,7 +51,20 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
             <div className="product-info">
               <span className="product-category">{product.category}</span>
               <h2 className="product-name">{product.name}</h2>
-              <span className="product-brand">Brand: {product.brand}</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.25rem' }}>
+                <span className="product-brand">Brand: {product.brand}</span>
+                <span className="product-size-badge" style={{ 
+                  fontSize: '0.75rem', 
+                  fontWeight: '600', 
+                  color: 'var(--text-secondary)', 
+                  background: 'rgba(255, 255, 255, 0.05)', 
+                  padding: '2px 8px', 
+                  borderRadius: '4px',
+                  border: '1px solid var(--border-color)'
+                }}>
+                  {getProductQuantity(product.prices)}
+                </span>
+              </div>
             </div>
 
             {/* Price Side by Side comparison row */}

@@ -4,6 +4,13 @@ import { Trash2, Plus, Minus, ShoppingBag, Sparkles } from 'lucide-react';
 export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBasket }) {
   const hasItems = basketItems.length > 0;
 
+  // Helper to get product package quantity details
+  const getProductQuantity = (prices) => {
+    const storeDetails = prices.Continente || prices['Pingo Doce'];
+    if (!storeDetails) return '';
+    return `${storeDetails.packageSize} ${storeDetails.packageUnit}`;
+  };
+
   // Calculate totals locally for instantaneous updates
   const calculateTotals = () => {
     let continenteTotal = 0;
@@ -58,7 +65,7 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
                 <div key={item.id} className="basket-item">
                   <div className="basket-item-info">
                     <span className="basket-item-name">{item.name}</span>
-                    <span className="basket-item-brand">{item.brand}</span>
+                    <span className="basket-item-brand">{item.brand} • {getProductQuantity(item.prices)}</span>
                     
                     <div className="basket-item-qty-control">
                       <button 
