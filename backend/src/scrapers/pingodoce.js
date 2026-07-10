@@ -138,6 +138,10 @@ function extractProductsFromSearchHtml(html) {
       const urlMatch = context.match(/href="([^"]+\/produtos\/[^"]+)"/i) || context.match(/href="([^"]+\/produto\/[^"]+)"/i) || context.match(/href="([^"]+)"/i);
       const detailUrl = urlMatch ? (urlMatch[1].startsWith('http') ? urlMatch[1] : 'https://www.pingodoce.pt' + urlMatch[1]) : null;
 
+      // Extract image URL
+      const imgMatch = context.match(/class="[^"]*product-tile-component-image[^"]*"[^>]*src="([^"]+)"/i) || context.match(/class="[^"]*product-tile-component-image[^"]*"[^>]*data-src="([^"]+)"/i);
+      const imageUrl = imgMatch ? imgMatch[1].replace(/&amp;/g, '&') : null;
+
       // Extract quantity string (before the | separator in class="product-unit")
       const unitMatch = context.match(/class="product-unit"[^>]*>([\s\S]*?)<\/div>/i);
       const quantityStr = unitMatch ? unitMatch[1].replace(/<[^>]*>/g, '').split('|')[0].trim() : null;
@@ -157,6 +161,7 @@ function extractProductsFromSearchHtml(html) {
           rawCategory: decodeHtmlEntities(item.item_category || ''),
           price: parseFloat(item.price) || 0.0,
           detailUrl,
+          imageUrl,
           quantityStr,
           isPromo,
           saleDetails: decodeHtmlEntities(saleDetails)
@@ -201,8 +206,8 @@ function saveProductToDb(db, product) {
               if (spRow) {
                 // Update mapping link & quantity
                 db.run(
-                  'UPDATE store_products SET store_product_id = ?, store_url = ?, package_size = ?, package_unit = ? WHERE id = ?',
-                  [product.storeProductId, product.detailUrl, parsedQty.size, parsedQty.unit, spRow.id],
+                  'UPDATE store_products SET store_product_id = ?, store_url = ?, package_size = ?, package_unit = ?, image_url = ? WHERE id = ?',
+                  [product.storeProductId, product.detailUrl, parsedQty.size, parsedQty.unit, product.imageUrl, spRow.id],
                   (err) => {
                     if (err) return reject(err);
                     insertPriceHistory(spRow.id, parsedQty, prodId);
@@ -211,8 +216,8 @@ function saveProductToDb(db, product) {
               } else {
                 // Create new mapping
                 db.run(
-                  'INSERT INTO store_products (product_id, store, store_product_id, store_url, package_size, package_unit) VALUES (?, "Pingo Doce", ?, ?, ?, ?)',
-                  [prodId, product.storeProductId, product.detailUrl, parsedQty.size, parsedQty.unit],
+                  'INSERT INTO store_products (product_id, store, store_product_id, store_url, package_size, package_unit, image_url) VALUES (?, "Pingo Doce", ?, ?, ?, ?, ?)',
+                  [prodId, product.storeProductId, product.detailUrl, parsedQty.size, parsedQty.unit, product.imageUrl],
                   function(err) {
                     if (err) return reject(err);
                     insertPriceHistory(this.lastID, parsedQty, prodId);

@@ -31,7 +31,7 @@ app.get('/api/products', (req, res) => {
   let query = `
     SELECT 
       p.id as product_id, p.name, p.brand, p.category, p.barcode_ean,
-      sp.id as store_product_id, sp.store, sp.store_product_id as sku, sp.store_url, sp.package_size, sp.package_unit,
+      sp.id as store_product_id, sp.store, sp.store_product_id as sku, sp.store_url, sp.package_size, sp.package_unit, sp.image_url,
       ph.price, ph.price_per_unit, ph.is_on_sale, ph.sale_details, ph.record_date
     FROM products p
     LEFT JOIN store_products sp ON p.id = sp.product_id
@@ -87,6 +87,7 @@ app.get('/api/products', (req, res) => {
           url: row.store_url,
           packageSize: row.package_size,
           packageUnit: row.package_unit,
+          imageUrl: row.image_url,
           price: row.price,
           pricePerUnit: row.price_per_unit,
           isOnSale: !!row.is_on_sale,

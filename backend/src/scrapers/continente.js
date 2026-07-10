@@ -137,6 +137,10 @@ function extractProductsFromSearchHtml(html) {
       const urlMatch = context.match(/href="([^"]+\/produto\/[^"]+)"/i);
       const detailUrl = urlMatch ? (urlMatch[1].startsWith('http') ? urlMatch[1] : 'https://www.continente.pt' + urlMatch[1]) : null;
 
+      // Extract image URL
+      const imgMatch = context.match(/class="[^"]*ct-tile-image[^"]*"[^>]*data-src="([^"]+)"/i) || context.match(/class="[^"]*ct-tile-image[^"]*"[^>]*src="([^"]+)"/i);
+      const imageUrl = imgMatch ? imgMatch[1].replace(/&amp;/g, '&') : null;
+
       // Extract quantity string
       const qtyMatch = context.match(/class="pwc-tile--quantity"[^>]*>([\s\S]*?)<\/p>/i);
       const quantityStr = qtyMatch ? qtyMatch[1].replace(/<[^>]*>/g, '').trim() : null;
@@ -156,6 +160,7 @@ function extractProductsFromSearchHtml(html) {
           category: decodeHtmlEntities(productMeta.category || 'Outros'),
           price: parseFloat(productMeta.price) || 0.0,
           detailUrl,
+          imageUrl,
           quantityStr,
           isPromo,
           saleDetails: decodeHtmlEntities(saleDetails)
@@ -217,8 +222,8 @@ function saveProductToDb(db, product) {
               if (spRow) {
                 // Update mapping link & quantity
                 db.run(
-                  'UPDATE store_products SET store_product_id = ?, store_url = ?, package_size = ?, package_unit = ? WHERE id = ?',
-                  [product.storeProductId, product.detailUrl, parsedQty.size, parsedQty.unit, spRow.id],
+                  'UPDATE store_products SET store_product_id = ?, store_url = ?, package_size = ?, package_unit = ?, image_url = ? WHERE id = ?',
+                  [product.storeProductId, product.detailUrl, parsedQty.size, parsedQty.unit, product.imageUrl, spRow.id],
                   (err) => {
                     if (err) return reject(err);
                     insertPriceHistory(spRow.id, parsedQty);
@@ -227,8 +232,8 @@ function saveProductToDb(db, product) {
               } else {
                 // Create new mapping
                 db.run(
-                  'INSERT INTO store_products (product_id, store, store_product_id, store_url, package_size, package_unit) VALUES (?, "Continente", ?, ?, ?, ?)',
-                  [prodId, product.storeProductId, product.detailUrl, parsedQty.size, parsedQty.unit],
+                  'INSERT INTO store_products (product_id, store, store_product_id, store_url, package_size, package_unit, image_url) VALUES (?, "Continente", ?, ?, ?, ?, ?)',
+                  [prodId, product.storeProductId, product.detailUrl, parsedQty.size, parsedQty.unit, product.imageUrl],
                   function(err) {
                     if (err) return reject(err);
                     insertPriceHistory(this.lastID, parsedQty);

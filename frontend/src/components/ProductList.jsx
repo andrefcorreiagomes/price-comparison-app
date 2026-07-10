@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart, TrendingUp, Sparkles } from 'lucide-react';
+import { ShoppingCart, TrendingUp, Sparkles, ShoppingBag } from 'lucide-react';
 
 export default function ProductList({ products, onSelectProduct, onAddToBasket, selectedProductId }) {
   if (products.length === 0) {
@@ -17,6 +17,17 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
     const storeDetails = prices.Continente || prices['Pingo Doce'];
     if (!storeDetails) return '';
     return `${storeDetails.packageSize} ${storeDetails.packageUnit}`;
+  };
+
+  // Helper to get first available product image URL
+  const getProductImage = (prices) => {
+    if (prices.Continente && prices.Continente.imageUrl) {
+      return prices.Continente.imageUrl;
+    }
+    if (prices['Pingo Doce'] && prices['Pingo Doce'].imageUrl) {
+      return prices['Pingo Doce'].imageUrl;
+    }
+    return null;
   };
 
   // Helper to compare prices and calculate savings details
@@ -41,6 +52,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
       {products.map((product) => {
         const cheapestInfo = getCheapestInfo(product.prices);
         const isSelected = selectedProductId === product.id;
+        const imgUrl = getProductImage(product.prices);
 
         return (
           <div 
@@ -48,6 +60,23 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
             className={`product-card ${isSelected ? 'selected' : ''}`}
             onClick={() => onSelectProduct(product)}
           >
+            <div className="product-card-image-container">
+              {imgUrl && (
+                <img 
+                  src={imgUrl} 
+                  alt={product.name} 
+                  className="product-card-image"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.parentNode.classList.add('image-error');
+                  }}
+                />
+              )}
+              <div className="fallback-placeholder" style={{ display: imgUrl ? 'none' : 'flex' }}>
+                <ShoppingBag size={28} className="fallback-icon" />
+              </div>
+            </div>
             <div className="product-info">
               <span className="product-category">{product.category}</span>
               <h2 className="product-name">{product.name}</h2>

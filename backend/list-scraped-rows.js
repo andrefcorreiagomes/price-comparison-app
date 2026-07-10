@@ -10,7 +10,7 @@ const db = new sqlite3.Database(DB_PATH, sqlite3.OPEN_READONLY, (err) => {
 });
 
 // We want to query products with ID 16, 17, 18, 19, 20
-const productIds = [16, 17, 18, 19, 20];
+const productIds = [15, 16, 17, 18, 19, 20];
 const placeholders = productIds.map(() => '?').join(',');
 
 db.serialize(() => {

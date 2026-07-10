@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS store_products (
     store_url TEXT,
     package_size REAL NOT NULL,
     package_unit TEXT NOT NULL,
+    image_url TEXT,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
