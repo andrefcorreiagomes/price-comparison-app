@@ -89,7 +89,8 @@ function fetchLidlProducts(query) {
               ? gb.brand.name 
               : (typeof gb.brand === 'string' ? gb.brand : (gb.keyfacts?.analyticsCategory || ''));
             const storeProductId = String(gb.productId || item.code || gb.erpNumber);
-            const detailUrl = item.url ? `https://www.lidl.pt${item.url}` : 'https://www.lidl.pt';
+            const urlPath = (gb && (gb.canonicalUrl || gb.canonicalPath)) || item.url;
+            const detailUrl = urlPath ? `https://www.lidl.pt${urlPath}` : 'https://www.lidl.pt';
             const imageUrl = gb.image || null;
             const quantityStr = gb.price?.packaging?.text || gb.title || '';
             const isPromo = (gb.price?.discount?.showDiscount || gb.price?.discount?.discountText) ? 1 : 0;
