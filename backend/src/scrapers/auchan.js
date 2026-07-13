@@ -3,6 +3,44 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const matcher = require('../utils/matcher');
 
+// Helper to decode HTML character entities in strings
+function decodeHtmlEntities(str) {
+  if (!str) return '';
+  return str
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&aacute;/g, 'á')
+    .replace(/&eacute;/g, 'é')
+    .replace(/&iacute;/g, 'í')
+    .replace(/&oacute;/g, 'ó')
+    .replace(/&uacute;/g, 'ú')
+    .replace(/&atilde;/g, 'ã')
+    .replace(/&otilde;/g, 'õ')
+    .replace(/&Atilde;/g, 'Ã')
+    .replace(/&Otilde;/g, 'Õ')
+    .replace(/&ccedil;/g, 'ç')
+    .replace(/&acirc;/g, 'â')
+    .replace(/&ecirc;/g, 'ê')
+    .replace(/&ocirc;/g, 'ô')
+    .replace(/&Acirc;/g, 'Â')
+    .replace(/&Ecirc;/g, 'Ê')
+    .replace(/&Ocirc;/g, 'Ô')
+    .replace(/&agrave;/g, 'à')
+    .replace(/&Aacute;/g, 'Á')
+    .replace(/&Eacute;/g, 'É')
+    .replace(/&Iacute;/g, 'Í')
+    .replace(/&Oacute;/g, 'Ó')
+    .replace(/&Uacute;/g, 'Ú')
+    .replace(/&Ccedil;/g, 'Ç')
+    .replace(/&ordm;/g, 'º')
+    .replace(/&ordf;/g, 'ª');
+}
+
 // Helper to parse quantity details from name/package string
 function parseQuantity(qtyStr) {
   if (!qtyStr) return { size: 1.0, unit: 'un' };
@@ -115,11 +153,11 @@ function fetchAuchanProducts(query, redirectUrl = null, depth = 0) {
                 const gtmJsonStr = gtmAttr[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&');
                 const gtm = JSON.parse(gtmJsonStr);
                 
-                const name = gtm.name || '';
+                const name = decodeHtmlEntities(gtm.name || '');
                 const id = gtm.id || '';
                 const price = parseFloat(gtm.price || 0);
-                const brand = gtm.brand || '';
-                const category = gtm.category || '';
+                const brand = decodeHtmlEntities(gtm.brand || '');
+                const category = decodeHtmlEntities(gtm.category || '');
                 
                 if (!id || isNaN(price) || price <= 0) {
                   continue;
