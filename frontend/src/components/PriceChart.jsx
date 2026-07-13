@@ -51,7 +51,7 @@ export default function PriceChart({ historyData, productName }) {
   if (!historyData || historyData.length === 0) {
     return (
       <div className="empty-state">
-        <p className="empty-state-title">No history data available</p>
+        <p className="empty-state-title">Sem dados de histórico disponíveis</p>
       </div>
     );
   }
@@ -78,7 +78,7 @@ export default function PriceChart({ historyData, productName }) {
     try {
       const parts = tickItem.split('-');
       if (parts.length === 3) {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         const day = parseInt(parts[2], 10);
         const month = months[parseInt(parts[1], 10) - 1];
         return `${day} ${month}`;

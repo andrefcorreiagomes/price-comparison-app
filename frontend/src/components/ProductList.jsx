@@ -96,7 +96,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
               <span className="product-category">{product.category}</span>
               <h2 className="product-name">{product.name}</h2>
               <div style={{ marginTop: '0.25rem' }}>
-                <span className="product-brand">Brand: {product.brand}</span>
+                <span className="product-brand">Marca: {product.brand}</span>
               </div>
             </div>
 
@@ -115,7 +115,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
                     </span>
                     {product.prices.Continente.isOnSale && (
                       <span className="promo-badge" title={product.prices.Continente.saleDetails}>
-                        Sale
+                        Promo
                       </span>
                     )}
                   </>
@@ -139,7 +139,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
                     </span>
                     {product.prices['Pingo Doce'].isOnSale && (
                       <span className="promo-badge" title={product.prices['Pingo Doce'].saleDetails}>
-                        Sale
+                        Promo
                       </span>
                     )}
                   </>
@@ -163,7 +163,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
                     </span>
                     {product.prices.Lidl.isOnSale && (
                       <span className="promo-badge" title={product.prices.Lidl.saleDetails}>
-                        Sale
+                        Promo
                       </span>
                     )}
                   </>
@@ -187,7 +187,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
                     </span>
                     {product.prices.Auchan.isOnSale && (
                       <span className="promo-badge" title={product.prices.Auchan.saleDetails}>
-                        Sale
+                        Promo
                       </span>
                     )}
                   </>
@@ -204,11 +204,11 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
               <div style={{ minHeight: '26px' }}>
                 {cheapestInfo.store === 'Tie' ? (
                   <div className="cheapest-badge" style={{ color: 'var(--text-secondary)', background: 'var(--border-color)', borderColor: 'var(--border-color-hover)' }}>
-                    Same price at both stores
+                    Preço idêntico nos supermercados
                   </div>
                 ) : (
                   <div className="cheapest-badge">
-                    Cheaper at {cheapestInfo.store} (save €{cheapestInfo.savings.toFixed(2)}/{cheapestInfo.unit})
+                    Mais barato no {cheapestInfo.store} (poupa €{cheapestInfo.savings.toFixed(2)}/{cheapestInfo.unit})
                   </div>
                 )}
               </div>
@@ -219,17 +219,17 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
               <button 
                 className="btn-card" 
                 onClick={() => onSelectProduct(product)}
-                title="View historical price charts"
+                title="Ver gráfico do histórico de preços"
               >
                 <TrendingUp size={14} />
-                History
+                Histórico
               </button>
               <button 
                 className="btn-card btn-card-primary" 
                 onClick={() => onAddToBasket(product)}
               >
                 <ShoppingCart size={14} />
-                Add List
+                Adicionar
               </button>
             </div>
           </div>

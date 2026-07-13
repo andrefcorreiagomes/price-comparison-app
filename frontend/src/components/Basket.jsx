@@ -88,21 +88,21 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
     };
   };
 
-  const { continenteTotal, pingoDoceTotal, winner, savings } = calculateTotals();
+  const { continenteTotal, pingoDoceTotal, lidlTotal, auchanTotal, winner, savings } = calculateTotals();
 
   return (
     <div className="basket-panel">
       <h3 className="basket-title">
         <ShoppingBag size={20} className="color-accent" />
-        Shopping Basket
+        Carrinho de Compras
         {hasItems && <span className="basket-count">{basketItems.length}</span>}
       </h3>
 
       {!hasItems ? (
         <div className="empty-state" style={{ padding: '2rem 1rem', minHeight: '200px' }}>
           <ShoppingBag size={32} className="empty-state-icon" style={{ opacity: 0.5 }} />
-          <h4 className="empty-state-title" style={{ fontSize: '1rem' }}>Your basket is empty</h4>
-          <p className="empty-state-desc" style={{ fontSize: '0.8rem' }}>Add items from the comparison list to build your shopping trip.</p>
+          <h4 className="empty-state-title" style={{ fontSize: '1rem' }}>O seu carrinho está vazio</h4>
+          <p className="empty-state-desc" style={{ fontSize: '0.8rem' }}>Adicione produtos da lista de comparação para planear a sua compra.</p>
         </div>
       ) : (
         <>
@@ -124,7 +124,7 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
                       <button 
                         className="btn-qty" 
                         onClick={() => onUpdateQuantity(item.id, -1)}
-                        title="Decrease quantity"
+                        title="Diminuir quantidade"
                       >
                         <Minus size={10} />
                       </button>
@@ -132,7 +132,7 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
                       <button 
                         className="btn-qty" 
                         onClick={() => onUpdateQuantity(item.id, 1)}
-                        title="Increase quantity"
+                        title="Aumentar quantidade"
                       >
                         <Plus size={10} />
                       </button>
@@ -150,7 +150,7 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
                     <button 
                       className="btn-remove-item"
                       onClick={() => onRemoveFromBasket(item.id)}
-                      title="Remove product"
+                      title="Remover produto"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -193,16 +193,16 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
             {winner !== 'Tie' ? (
               <div className="basket-winner-box">
                 <div className="winner-message">
-                  🏆 {winner} is cheaper!
+                  🏆 O {winner} é mais barato!
                 </div>
                 <div className="savings-message">
-                  You save <strong>€{savings.toFixed(2)}</strong> on this shopping list.
+                  Poupa <strong>€{savings.toFixed(2)}</strong> nesta lista de compras.
                 </div>
               </div>
             ) : (
               <div className="basket-winner-box" style={{ background: 'var(--bg-input)', borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}>
-                <div className="winner-message">⚖️ It's a Tie!</div>
-                <div className="savings-message">Both stores cost the exact same total.</div>
+                <div className="winner-message">⚖️ Empate!</div>
+                <div className="savings-message">Os supermercados têm exatamente o mesmo custo total.</div>
               </div>
             )}
           </div>

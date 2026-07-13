@@ -145,13 +145,13 @@ export default function App() {
             <Sparkles className="color-accent" size={28} />
             PoupaFárcil
           </h1>
-          <p>Grocery Price Comparison: Continente vs. Pingo Doce vs. Lidl vs. Auchan</p>
+          <p>Comparação de Preços de Supermercados: Continente vs. Pingo Doce vs. Lidl vs. Auchan</p>
         </div>
         <div className="header-actions">
           <button 
             className="btn-theme-toggle" 
             onClick={toggleTheme}
-            title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+            title={theme === 'dark' ? 'Mudar para Tema Claro' : 'Mudar para Tema Escuro'}
           >
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
@@ -164,7 +164,7 @@ export default function App() {
           <Search className="search-icon" size={18} />
           <input 
             type="text" 
-            placeholder="Search groceries (e.g., Mimosa, Leite, Arroz)..." 
+            placeholder="Pesquisar produtos (ex: Mimosa, Leite, Arroz)..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="search-input"
@@ -184,7 +184,7 @@ export default function App() {
           onChange={(e) => setCategoryFilter(e.target.value)}
           className="category-select"
         >
-          <option value="">All Categories</option>
+          <option value="">Todas as Categorias</option>
           {categories.map(cat => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
@@ -196,13 +196,13 @@ export default function App() {
         <section className="history-panel">
           <div className="history-header">
             <div className="history-title-area">
-              <h3>Price Evolution Chart</h3>
-              <p>Comparing price changes over the last 30 days for <strong>{selectedProduct.name}</strong></p>
+              <h3>Gráfico de Evolução de Preços</h3>
+              <p>A comparar a variação de preços nos últimos 30 dias para <strong>{selectedProduct.name}</strong></p>
             </div>
             <button 
               className="btn-close-panel" 
               onClick={() => setSelectedProduct(null)}
-              title="Close chart panel"
+              title="Fechar painel do gráfico"
             >
               <X size={18} />
             </button>
@@ -211,7 +211,7 @@ export default function App() {
           <div className="chart-container">
             {loadingHistory ? (
               <div className="empty-state" style={{ height: '100%' }}>
-                <p className="empty-state-title">Loading history data...</p>
+                <p className="empty-state-title">A carregar histórico de preços...</p>
               </div>
             ) : (
               <PriceChart 
@@ -228,7 +228,7 @@ export default function App() {
         <section>
           {loading ? (
             <div className="empty-state" style={{ minHeight: '300px' }}>
-              <p className="empty-state-title">Loading groceries catalog...</p>
+              <p className="empty-state-title">A carregar catálogo de produtos...</p>
             </div>
           ) : (
             <ProductList 
