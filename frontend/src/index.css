@@ -30,6 +30,8 @@
   --color-continente-light: rgba(227, 6, 19, 0.15);
   --color-pingodoce: #009639; /* Pingo Doce Green */
   --color-pingodoce-light: rgba(0, 150, 57, 0.15);
+  --color-lidl: #00509F; /* Lidl Blue */
+  --color-lidl-light: rgba(0, 80, 159, 0.12);
 
   --color-savings: #10b981; /* Emerald Green */
   --color-savings-light: rgba(16, 185, 129, 0.1);
@@ -414,6 +416,11 @@ body {
   border-color: rgba(0, 150, 57, 0.15);
 }
 
+.store-price-box.lidl {
+  background: var(--color-lidl-light);
+  border-color: rgba(0, 80, 159, 0.15);
+}
+
 .store-name-tag {
   font-size: 0.7rem;
   font-weight: 700;
@@ -428,6 +435,10 @@ body {
 
 .pingodoce .store-name-tag {
   color: #51cf66;
+}
+
+.lidl .store-name-tag {
+  color: #4dabf7;
 }
 
 .store-price {
@@ -687,6 +698,17 @@ body {
   font-family: var(--font-display);
 }
 
+.store-basket-total.lidl {
+  background: var(--color-lidl-light);
+  border: 1px solid rgba(0, 80, 159, 0.2);
+}
+
+.store-basket-total.lidl .total-amount {
+  color: #4dabf7;
+  font-size: 1.15rem;
+  font-family: var(--font-display);
+}
+
 .basket-winner-box {
   background: var(--color-savings-light);
   border: 1px solid rgba(16, 185, 129, 0.2);
@@ -796,6 +818,10 @@ body {
 
 .chart-tooltip-row.pd {
   color: #51cf66;
+}
+
+.chart-tooltip-row.l {
+  color: #4dabf7;
 }
 
 /* Empty States */

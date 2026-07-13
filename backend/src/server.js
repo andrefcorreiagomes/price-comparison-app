@@ -207,8 +207,14 @@ app.post('/api/basket/compare', (req, res) => {
       };
     });
 
-    let continenteTotal = 0;
-    let pingoDoceTotal = 0;
+    const stores = ['Continente', 'Pingo Doce', 'Lidl']; // Predefined stores list to ensure correct columns
+
+    // Initialize store totals
+    const storeTotals = {};
+    stores.forEach(store => {
+      storeTotals[store] = 0;
+    });
+
     const itemsDetails = [];
 
     items.forEach(item => {
@@ -216,39 +222,70 @@ app.post('/api/basket/compare', (req, res) => {
       const prices = productPriceMap[productId];
 
       if (prices) {
-        const cPrice = prices['Continente'] ? prices['Continente'].price : null;
-        const pdPrice = prices['Pingo Doce'] ? prices['Pingo Doce'].price : null;
-
-        const cSubtotal = cPrice !== null ? cPrice * quantity : 0;
-        const pdSubtotal = pdPrice !== null ? pdPrice * quantity : 0;
-
-        continenteTotal += cSubtotal;
-        pingoDoceTotal += pdSubtotal;
+        const itemPrices = {};
+        const itemSubtotals = {};
+        
+        let name = 'Unknown Product';
+        let brand = '';
+        
+        stores.forEach(store => {
+          const storeData = prices[store];
+          const price = storeData ? storeData.price : null;
+          itemPrices[store] = price;
+          
+          const subtotal = price !== null ? price * quantity : 0;
+          itemSubtotals[store] = Number(subtotal.toFixed(2));
+          
+          if (storeData) {
+            name = storeData.name;
+            brand = storeData.brand;
+            storeTotals[store] += subtotal;
+          }
+        });
 
         itemsDetails.push({
           productId,
-          name: prices['Continente'] ? prices['Continente'].name : (prices['Pingo Doce'] ? prices['Pingo Doce'].name : 'Unknown Product'),
-          brand: prices['Continente'] ? prices['Continente'].brand : (prices['Pingo Doce'] ? prices['Pingo Doce'].brand : ''),
+          name,
+          brand,
           quantity,
-          prices: {
-            Continente: cPrice,
-            'Pingo Doce': pdPrice
-          },
-          subtotals: {
-            Continente: Number(cSubtotal.toFixed(2)),
-            'Pingo Doce': Number(pdSubtotal.toFixed(2))
-          }
+          prices: itemPrices,
+          subtotals: itemSubtotals
         });
       }
     });
 
+    // Format totals and find winner
+    const formattedTotals = {};
+    let cheaperStore = 'Tie';
+    let minTotal = Infinity;
+    
+    // For savings, we compare the difference between the cheapest and next cheapest or standard
+    stores.forEach(store => {
+      const total = Number(storeTotals[store].toFixed(2));
+      formattedTotals[store] = total;
+      
+      // Cheaper store must have a valid total > 0 (to avoid N/A stores winning)
+      if (total > 0 && total < minTotal) {
+        minTotal = total;
+        cheaperStore = store;
+      }
+    });
+
+    // Calculate savings against the next cheapest (or standard diff if 2 stores)
+    let savings = 0;
+    const sortedTotals = Object.entries(formattedTotals)
+      .filter(([_, t]) => t > 0)
+      .sort((a, b) => a[1] - b[1]);
+
+    if (sortedTotals.length >= 2) {
+      // Savings = difference between second cheapest and cheapest
+      savings = Number((sortedTotals[1][1] - sortedTotals[0][1]).toFixed(2));
+    }
+
     res.json({
-      totals: {
-        Continente: Number(continenteTotal.toFixed(2)),
-        'Pingo Doce': Number(pingoDoceTotal.toFixed(2))
-      },
-      cheaperStore: continenteTotal < pingoDoceTotal ? 'Continente' : (pingoDoceTotal < continenteTotal ? 'Pingo Doce' : 'Tie'),
-      savings: Number(Math.abs(continenteTotal - pingoDoceTotal).toFixed(2)),
+      totals: formattedTotals,
+      cheaperStore,
+      savings,
       items: itemsDetails
     });
   });

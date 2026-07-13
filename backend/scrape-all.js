@@ -33,6 +33,9 @@ for (const q of queries) {
     
     console.log(`Running Pingo Doce scraper for "${q}"...`);
     execSync(`node src/scrapers/pingodoce.js "${q}"`, { stdio: 'inherit' });
+    
+    console.log(`Running Lidl scraper for "${q}"...`);
+    execSync(`node src/scrapers/lidl.js "${q}"`, { stdio: 'inherit' });
   } catch (err) {
     console.error(`Error scraping for "${q}":`, err.message);
   }

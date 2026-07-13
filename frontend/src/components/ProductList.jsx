@@ -21,26 +21,42 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
     if (prices['Pingo Doce'] && prices['Pingo Doce'].imageUrl) {
       return prices['Pingo Doce'].imageUrl;
     }
+    if (prices.Lidl && prices.Lidl.imageUrl) {
+      return prices.Lidl.imageUrl;
+    }
     return null;
   };
 
   // Helper to compare prices and calculate savings details based on unit price
   const getCheapestInfo = (prices) => {
-    const cVal = prices.Continente ? prices.Continente.pricePerUnit : null;
-    const pdVal = prices['Pingo Doce'] ? prices['Pingo Doce'].pricePerUnit : null;
+    const activeStores = [];
+    let unit = 'unit';
 
-    if (cVal === null || pdVal === null) return null;
+    ['Continente', 'Pingo Doce', 'Lidl'].forEach(store => {
+      if (prices[store] && prices[store].pricePerUnit > 0) {
+        activeStores.push({
+          store,
+          pricePerUnit: prices[store].pricePerUnit,
+          unit: prices[store].packageUnit
+        });
+        unit = prices[store].packageUnit || unit;
+      }
+    });
 
-    const unit = prices.Continente.packageUnit || prices['Pingo Doce'].packageUnit || 'unit';
+    if (activeStores.length < 2) return null;
 
-    if (cVal < pdVal) {
-      const diff = pdVal - cVal;
-      return { store: 'Continente', savings: diff, unit };
-    } else if (pdVal < cVal) {
-      const diff = cVal - pdVal;
-      return { store: 'Pingo Doce', savings: diff, unit };
+    // Sort by price per unit ascending
+    activeStores.sort((a, b) => a.pricePerUnit - b.pricePerUnit);
+
+    const cheapest = activeStores[0];
+    const secondCheapest = activeStores[1];
+    
+    if (cheapest.pricePerUnit === secondCheapest.pricePerUnit) {
+      return { store: 'Tie', savings: 0, unit };
     }
-    return { store: 'Tie', savings: 0, unit };
+
+    const diff = secondCheapest.pricePerUnit - cheapest.pricePerUnit;
+    return { store: cheapest.store, savings: diff, unit };
   };
 
   return (
@@ -120,6 +136,30 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
                     </span>
                     {product.prices['Pingo Doce'].isOnSale && (
                       <span className="promo-badge" title={product.prices['Pingo Doce'].saleDetails}>
+                        Sale
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <span className="store-price" style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>
+                    N/A
+                  </span>
+                )}
+              </div>
+
+              {/* Lidl */}
+              <div className="store-price-box lidl">
+                <span className="store-name-tag">Lidl {product.prices.Lidl ? `(${product.prices.Lidl.packageSize}${product.prices.Lidl.packageUnit})` : ''}</span>
+                {product.prices.Lidl ? (
+                  <>
+                    <span className="store-price">
+                      €{product.prices.Lidl.price.toFixed(2)}
+                    </span>
+                    <span className="store-unit-price">
+                      €{product.prices.Lidl.pricePerUnit.toFixed(2)}/{product.prices.Lidl.packageUnit}
+                    </span>
+                    {product.prices.Lidl.isOnSale && (
+                      <span className="promo-badge" title={product.prices.Lidl.saleDetails}>
                         Sale
                       </span>
                     )}

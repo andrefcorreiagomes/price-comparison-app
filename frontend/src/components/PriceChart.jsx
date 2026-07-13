@@ -26,12 +26,12 @@ const CustomTooltip = ({ active, payload, label }) => {
       <div className="chart-tooltip">
         <p className="chart-tooltip-date">{formattedDate}</p>
         {payload.map((entry) => {
-          const isContinente = entry.name === 'Continente';
-          const details = entry.payload[entry.name]?.saleDetails;
+          const storeClass = entry.name === 'Continente' ? 'c' : (entry.name === 'Pingo Doce' ? 'pd' : 'l');
+          const details = entry.payload[entry.name + 'Obj']?.saleDetails;
           return (
             <div
               key={entry.name}
-              className={`chart-tooltip-row ${isContinente ? 'c' : 'pd'}`}
+              className={`chart-tooltip-row ${storeClass}`}
             >
               <span>{entry.name}:</span>
               <span>
@@ -64,9 +64,11 @@ export default function PriceChart({ historyData, productName }) {
     date: d.date,
     Continente: d.Continente ? d.Continente.price : null,
     'Pingo Doce': d['Pingo Doce'] ? d['Pingo Doce'].price : null,
+    Lidl: d.Lidl ? d.Lidl.price : null,
     // Store details object for tooltips
     ContinenteObj: d.Continente,
-    'Pingo DoceObj': d['Pingo Doce']
+    'Pingo DoceObj': d['Pingo Doce'],
+    LidlObj: d.Lidl
   }));
 
   // Format date ticks for X-Axis (show day/month like "15 Jul")
@@ -133,6 +135,16 @@ export default function PriceChart({ historyData, productName }) {
             type="monotone"
             dataKey="Pingo Doce"
             stroke="#51cf66"
+            strokeWidth={3}
+            activeDot={{ r: 6 }}
+            dot={{ r: 1 }}
+            connectNulls
+          />
+          <Line
+            name="Lidl"
+            type="monotone"
+            dataKey="Lidl"
+            stroke="#4dabf7"
             strokeWidth={3}
             activeDot={{ r: 6 }}
             dot={{ r: 1 }}

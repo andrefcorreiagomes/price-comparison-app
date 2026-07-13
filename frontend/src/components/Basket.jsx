@@ -8,38 +8,74 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
   const getProductQuantity = (prices) => {
     const c = prices.Continente;
     const pd = prices['Pingo Doce'];
-    if (c && pd) {
-      if (c.packageSize === pd.packageSize && c.packageUnit === pd.packageUnit) {
-        return `${c.packageSize}${c.packageUnit}`;
+    const l = prices.Lidl;
+    
+    const activeSizes = [];
+    if (c) activeSizes.push(`C: ${c.packageSize}${c.packageUnit}`);
+    if (pd) activeSizes.push(`PD: ${pd.packageSize}${pd.packageUnit}`);
+    if (l) activeSizes.push(`L: ${l.packageSize}${l.packageUnit}`);
+    
+    const sizesOnly = [c, pd, l].filter(Boolean);
+    if (sizesOnly.length > 0) {
+      const first = sizesOnly[0];
+      const allIdentical = sizesOnly.every(s => s.packageSize === first.packageSize && s.packageUnit === first.packageUnit);
+      if (allIdentical) {
+        return `${first.packageSize}${first.packageUnit}`;
       }
-      return `C: ${c.packageSize}${c.packageUnit} • PD: ${pd.packageSize}${pd.packageUnit}`;
     }
-    const storeDetails = c || pd;
-    if (!storeDetails) return '';
-    return `${storeDetails.packageSize}${storeDetails.packageUnit}`;
+    
+    return activeSizes.join(' • ');
   };
 
   // Calculate totals locally for instantaneous updates
   const calculateTotals = () => {
     let continenteTotal = 0;
     let pingoDoceTotal = 0;
+    let lidlTotal = 0;
 
     basketItems.forEach(item => {
       const cPrice = item.prices.Continente ? item.prices.Continente.price : 0;
       const pdPrice = item.prices['Pingo Doce'] ? item.prices['Pingo Doce'].price : 0;
+      const lPrice = item.prices.Lidl ? item.prices.Lidl.price : 0;
       
       continenteTotal += cPrice * item.quantity;
       pingoDoceTotal += pdPrice * item.quantity;
+      lidlTotal += lPrice * item.quantity;
     });
 
-    const savings = Math.abs(continenteTotal - pingoDoceTotal);
+    const totalsList = [
+      { store: 'Continente', total: continenteTotal },
+      { store: 'Pingo Doce', total: pingoDoceTotal },
+      { store: 'Lidl', total: lidlTotal }
+    ].filter(t => t.total > 0);
+
     let winner = 'Tie';
-    if (continenteTotal < pingoDoceTotal) winner = 'Continente';
-    else if (pingoDoceTotal < continenteTotal) winner = 'Pingo Doce';
+    let minTotal = Infinity;
+    let maxTotal = -Infinity;
+    
+    totalsList.forEach(t => {
+      if (t.total < minTotal) {
+        minTotal = t.total;
+        winner = t.store;
+      }
+      if (t.total > maxTotal) {
+        maxTotal = t.total;
+      }
+    });
+
+    const winnersCount = totalsList.filter(t => t.total === minTotal).length;
+    if (winnersCount > 1) {
+      winner = 'Tie';
+    }
+
+    const savings = minTotal !== Infinity && maxTotal !== -Infinity && minTotal !== maxTotal
+      ? maxTotal - minTotal
+      : 0;
 
     return {
       continenteTotal: Number(continenteTotal.toFixed(2)),
       pingoDoceTotal: Number(pingoDoceTotal.toFixed(2)),
+      lidlTotal: Number(lidlTotal.toFixed(2)),
       winner,
       savings: Number(savings.toFixed(2))
     };
@@ -68,6 +104,7 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
             {basketItems.map((item) => {
               const cPrice = item.prices.Continente ? item.prices.Continente.price : null;
               const pdPrice = item.prices['Pingo Doce'] ? item.prices['Pingo Doce'].price : null;
+              const lPrice = item.prices.Lidl ? item.prices.Lidl.price : null;
 
               return (
                 <div key={item.id} className="basket-item">
@@ -97,8 +134,9 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
                   <div className="basket-item-actions">
                     {/* Tiny subtotal display */}
                     <div className="basket-item-prices">
-                      <div className="c">C: €{(cPrice * item.quantity).toFixed(2)}</div>
-                      <div className="pd">PD: €{(pdPrice * item.quantity).toFixed(2)}</div>
+                      {cPrice !== null && <div className="c">C: €{(cPrice * item.quantity).toFixed(2)}</div>}
+                      {pdPrice !== null && <div className="pd">PD: €{(pdPrice * item.quantity).toFixed(2)}</div>}
+                      {lPrice !== null && <div className="l">L: €{(lPrice * item.quantity).toFixed(2)}</div>}
                     </div>
                     <button 
                       className="btn-remove-item"
@@ -115,15 +153,26 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
 
           {/* Comparison summary */}
           <div className="basket-comparison-results">
-            <div className="store-basket-total continente">
-              <span>Continente</span>
-              <span className="total-amount">€{continenteTotal.toFixed(2)}</span>
-            </div>
+            {continenteTotal > 0 && (
+              <div className="store-basket-total continente">
+                <span>Continente</span>
+                <span className="total-amount">€{continenteTotal.toFixed(2)}</span>
+              </div>
+            )}
 
-            <div className="store-basket-total pingodoce">
-              <span>Pingo Doce</span>
-              <span className="total-amount">€{pingoDoceTotal.toFixed(2)}</span>
-            </div>
+            {pingoDoceTotal > 0 && (
+              <div className="store-basket-total pingodoce">
+                <span>Pingo Doce</span>
+                <span className="total-amount">€{pingoDoceTotal.toFixed(2)}</span>
+              </div>
+            )}
+
+            {lidlTotal > 0 && (
+              <div className="store-basket-total lidl">
+                <span>Lidl</span>
+                <span className="total-amount">€{lidlTotal.toFixed(2)}</span>
+              </div>
+            )}
 
             {winner !== 'Tie' ? (
               <div className="basket-winner-box">
