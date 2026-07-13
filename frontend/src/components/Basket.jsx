@@ -9,13 +9,15 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
     const c = prices.Continente;
     const pd = prices['Pingo Doce'];
     const l = prices.Lidl;
+    const a = prices.Auchan;
     
     const activeSizes = [];
     if (c) activeSizes.push(`C: ${c.packageSize}${c.packageUnit}`);
     if (pd) activeSizes.push(`PD: ${pd.packageSize}${pd.packageUnit}`);
     if (l) activeSizes.push(`L: ${l.packageSize}${l.packageUnit}`);
+    if (a) activeSizes.push(`A: ${a.packageSize}${a.packageUnit}`);
     
-    const sizesOnly = [c, pd, l].filter(Boolean);
+    const sizesOnly = [c, pd, l, a].filter(Boolean);
     if (sizesOnly.length > 0) {
       const first = sizesOnly[0];
       const allIdentical = sizesOnly.every(s => s.packageSize === first.packageSize && s.packageUnit === first.packageUnit);
@@ -32,21 +34,25 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
     let continenteTotal = 0;
     let pingoDoceTotal = 0;
     let lidlTotal = 0;
+    let auchanTotal = 0;
 
     basketItems.forEach(item => {
       const cPrice = item.prices.Continente ? item.prices.Continente.price : 0;
       const pdPrice = item.prices['Pingo Doce'] ? item.prices['Pingo Doce'].price : 0;
       const lPrice = item.prices.Lidl ? item.prices.Lidl.price : 0;
+      const aPrice = item.prices.Auchan ? item.prices.Auchan.price : 0;
       
       continenteTotal += cPrice * item.quantity;
       pingoDoceTotal += pdPrice * item.quantity;
       lidlTotal += lPrice * item.quantity;
+      auchanTotal += aPrice * item.quantity;
     });
 
     const totalsList = [
       { store: 'Continente', total: continenteTotal },
       { store: 'Pingo Doce', total: pingoDoceTotal },
-      { store: 'Lidl', total: lidlTotal }
+      { store: 'Lidl', total: lidlTotal },
+      { store: 'Auchan', total: auchanTotal }
     ].filter(t => t.total > 0);
 
     let winner = 'Tie';
@@ -76,6 +82,7 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
       continenteTotal: Number(continenteTotal.toFixed(2)),
       pingoDoceTotal: Number(pingoDoceTotal.toFixed(2)),
       lidlTotal: Number(lidlTotal.toFixed(2)),
+      auchanTotal: Number(auchanTotal.toFixed(2)),
       winner,
       savings: Number(savings.toFixed(2))
     };
@@ -105,6 +112,7 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
               const cPrice = item.prices.Continente ? item.prices.Continente.price : null;
               const pdPrice = item.prices['Pingo Doce'] ? item.prices['Pingo Doce'].price : null;
               const lPrice = item.prices.Lidl ? item.prices.Lidl.price : null;
+              const aPrice = item.prices.Auchan ? item.prices.Auchan.price : null;
 
               return (
                 <div key={item.id} className="basket-item">
@@ -137,6 +145,7 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
                       {cPrice !== null && <div className="c">C: €{(cPrice * item.quantity).toFixed(2)}</div>}
                       {pdPrice !== null && <div className="pd">PD: €{(pdPrice * item.quantity).toFixed(2)}</div>}
                       {lPrice !== null && <div className="l">L: €{(lPrice * item.quantity).toFixed(2)}</div>}
+                      {aPrice !== null && <div className="a">A: €{(aPrice * item.quantity).toFixed(2)}</div>}
                     </div>
                     <button 
                       className="btn-remove-item"
@@ -171,6 +180,13 @@ export default function Basket({ basketItems, onUpdateQuantity, onRemoveFromBask
               <div className="store-basket-total lidl">
                 <span>Lidl</span>
                 <span className="total-amount">€{lidlTotal.toFixed(2)}</span>
+              </div>
+            )}
+
+            {auchanTotal > 0 && (
+              <div className="store-basket-total auchan">
+                <span>Auchan</span>
+                <span className="total-amount">€{auchanTotal.toFixed(2)}</span>
               </div>
             )}
 

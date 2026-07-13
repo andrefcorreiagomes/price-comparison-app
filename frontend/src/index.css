@@ -32,6 +32,8 @@
   --color-pingodoce-light: rgba(0, 150, 57, 0.15);
   --color-lidl: #00509F; /* Lidl Blue */
   --color-lidl-light: rgba(0, 80, 159, 0.12);
+  --color-auchan: #ff6b35; /* Auchan Orange */
+  --color-auchan-light: rgba(255, 107, 53, 0.12);
 
   --color-savings: #10b981; /* Emerald Green */
   --color-savings-light: rgba(16, 185, 129, 0.1);
@@ -421,6 +423,11 @@ body {
   border-color: rgba(0, 80, 159, 0.15);
 }
 
+.store-price-box.auchan {
+  background: var(--color-auchan-light);
+  border-color: rgba(255, 107, 53, 0.15);
+}
+
 .store-name-tag {
   font-size: 0.7rem;
   font-weight: 700;
@@ -439,6 +446,10 @@ body {
 
 .lidl .store-name-tag {
   color: #4dabf7;
+}
+
+.auchan .store-name-tag {
+  color: #ff922b;
 }
 
 .store-price {
@@ -709,6 +720,17 @@ body {
   font-family: var(--font-display);
 }
 
+.store-basket-total.auchan {
+  background: var(--color-auchan-light);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+}
+
+.store-basket-total.auchan .total-amount {
+  color: #ff922b;
+  font-size: 1.15rem;
+  font-family: var(--font-display);
+}
+
 .basket-winner-box {
   background: var(--color-savings-light);
   border: 1px solid rgba(16, 185, 129, 0.2);
@@ -822,6 +844,10 @@ body {
 
 .chart-tooltip-row.l {
   color: #4dabf7;
+}
+
+.chart-tooltip-row.a {
+  color: #ff922b;
 }
 
 /* Empty States */

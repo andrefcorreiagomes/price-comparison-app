@@ -145,7 +145,7 @@ export default function App() {
             <Sparkles className="color-accent" size={28} />
             PoupaFárcil
           </h1>
-          <p>Grocery Price Comparison: Continente vs. Pingo Doce vs. Lidl</p>
+          <p>Grocery Price Comparison: Continente vs. Pingo Doce vs. Lidl vs. Auchan</p>
         </div>
         <div className="header-actions">
           <button 

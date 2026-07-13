@@ -24,6 +24,9 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
     if (prices.Lidl && prices.Lidl.imageUrl) {
       return prices.Lidl.imageUrl;
     }
+    if (prices.Auchan && prices.Auchan.imageUrl) {
+      return prices.Auchan.imageUrl;
+    }
     return null;
   };
 
@@ -32,7 +35,7 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
     const activeStores = [];
     let unit = 'unit';
 
-    ['Continente', 'Pingo Doce', 'Lidl'].forEach(store => {
+    ['Continente', 'Pingo Doce', 'Lidl', 'Auchan'].forEach(store => {
       if (prices[store] && prices[store].pricePerUnit > 0) {
         activeStores.push({
           store,
@@ -160,6 +163,30 @@ export default function ProductList({ products, onSelectProduct, onAddToBasket, 
                     </span>
                     {product.prices.Lidl.isOnSale && (
                       <span className="promo-badge" title={product.prices.Lidl.saleDetails}>
+                        Sale
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <span className="store-price" style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>
+                    N/A
+                  </span>
+                )}
+              </div>
+
+              {/* Auchan */}
+              <div className="store-price-box auchan">
+                <span className="store-name-tag">Auchan {product.prices.Auchan ? `(${product.prices.Auchan.packageSize}${product.prices.Auchan.packageUnit})` : ''}</span>
+                {product.prices.Auchan ? (
+                  <>
+                    <span className="store-price">
+                      €{product.prices.Auchan.price.toFixed(2)}
+                    </span>
+                    <span className="store-unit-price">
+                      €{product.prices.Auchan.pricePerUnit.toFixed(2)}/{product.prices.Auchan.packageUnit}
+                    </span>
+                    {product.prices.Auchan.isOnSale && (
+                      <span className="promo-badge" title={product.prices.Auchan.saleDetails}>
                         Sale
                       </span>
                     )}

@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE TABLE IF NOT EXISTS store_products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     product_id INTEGER NOT NULL,
-    store TEXT NOT NULL CHECK(store IN ('Continente', 'Pingo Doce', 'Lidl')),
+    store TEXT NOT NULL CHECK(store IN ('Continente', 'Pingo Doce', 'Lidl', 'Auchan')),
     store_product_id TEXT NOT NULL,
     store_url TEXT,
     package_size REAL NOT NULL,

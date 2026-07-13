@@ -36,6 +36,9 @@ for (const q of queries) {
     
     console.log(`Running Lidl scraper for "${q}"...`);
     execSync(`node src/scrapers/lidl.js "${q}"`, { stdio: 'inherit' });
+    
+    console.log(`Running Auchan scraper for "${q}"...`);
+    execSync(`node src/scrapers/auchan.js "${q}"`, { stdio: 'inherit' });
   } catch (err) {
     console.error(`Error scraping for "${q}":`, err.message);
   }

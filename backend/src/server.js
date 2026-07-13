@@ -207,7 +207,7 @@ app.post('/api/basket/compare', (req, res) => {
       };
     });
 
-    const stores = ['Continente', 'Pingo Doce', 'Lidl']; // Predefined stores list to ensure correct columns
+    const stores = ['Continente', 'Pingo Doce', 'Lidl', 'Auchan']; // Predefined stores list to ensure correct columns
 
     // Initialize store totals
     const storeTotals = {};
